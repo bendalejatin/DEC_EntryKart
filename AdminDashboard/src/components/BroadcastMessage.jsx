@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./styles/BroadcastMessage.css"; // Import the CSS file
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const BroadcastMessage = () => {
   const [message, setMessage] = useState("");
   const [broadcastType, setBroadcastType] = useState("specific");
@@ -18,7 +21,7 @@ const BroadcastMessage = () => {
   useEffect(() => {
     if (broadcastType !== "all") {
       axios
-        .get(`http://localhost:5000/api/societies?email=${adminEmail}`)
+        .get(`${BASE_URL}/api/societies?email=${adminEmail}`)
         .then((res) => {
           setSocieties(res.data);
         })
@@ -47,7 +50,7 @@ const BroadcastMessage = () => {
 
   const fetchBroadcasts = () => {
     axios
-      .get(`http://localhost:5000/api/broadcast?email=${adminEmail}`)
+      .get(`${BASE_URL}/api/broadcast?email=${adminEmail}`)
       .then((res) => {
         setBroadcasts(res.data);
       })
@@ -68,7 +71,7 @@ const BroadcastMessage = () => {
 
     if (editingBroadcast) {
       axios
-        .put(`http://localhost:5000/api/broadcast/${editingBroadcast._id}`, payload)
+        .put(`${BASE_URL}/api/broadcast/${editingBroadcast._id}`, payload)
         .then((res) => {
           alert("Broadcast message updated successfully!");
           resetForm();
@@ -79,7 +82,7 @@ const BroadcastMessage = () => {
         });
     } else {
       axios
-        .post("http://localhost:5000/api/broadcast", payload)
+        .post(`${BASE_URL}/api/broadcast`, payload)
         .then((res) => {
           alert("Broadcast message sent successfully!");
           resetForm();
@@ -114,7 +117,7 @@ const BroadcastMessage = () => {
   const handleDelete = (id) => {
     if (window.confirm("Are you sure you want to delete this broadcast message?")) {
       axios
-        .delete(`http://localhost:5000/api/broadcast/${id}`)
+        .delete(`${BASE_URL}/api/broadcast/${id}`)
         .then(() => {
           alert("Broadcast message deleted successfully!");
           fetchBroadcasts();

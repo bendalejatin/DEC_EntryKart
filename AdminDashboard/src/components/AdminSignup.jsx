@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./styles/Auth.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const AdminSignup = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -14,7 +17,7 @@ const AdminSignup = () => {
     e.preventDefault();
     try {
       // ✅ Ensure all fields are included in the request
-      await axios.post("http://localhost:5000/api/auth/signup", {  
+      await axios.post(`${BASE_URL}/api/auth/signup`, {  
         name, 
         email, 
         password, 

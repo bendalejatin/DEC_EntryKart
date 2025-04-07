@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./styles/EventManagement.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const EventManagement = () => {
   const [events, setEvents] = useState([]);
   const [newEvent, setNewEvent] = useState({
@@ -20,7 +23,7 @@ const EventManagement = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/events?email=${adminEmail}`);
+      const response = await axios.get(`${BASE_URL}/api/events?email=${adminEmail}`);
       setEvents(response.data);
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -37,7 +40,7 @@ const EventManagement = () => {
       return;
     }
     try {
-      const response = await axios.post("http://localhost:5000/api/events", { ...newEvent, adminEmail });
+      const response = await axios.post(`${BASE_URL}/api/events`, { ...newEvent, adminEmail });
       setEvents([...events, response.data]);
       setNewEvent({ title: "", description: "", date: "", location: "" });
       alert("✅ Event added successfully!");
@@ -50,7 +53,7 @@ const EventManagement = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this event?");
     if (!confirmDelete) return;
     try {
-      await axios.delete(`http://localhost:5000/api/events/${id}`);
+      await axios.delete(`${BASE_URL}/api/events/${id}`);
       setEvents(events.filter((event) => event._id !== id));
     } catch (error) {
       console.error("Error deleting event:", error);
@@ -65,7 +68,7 @@ const EventManagement = () => {
   const updateEvent = async () => {
     if (!editingEvent) return;
     try {
-      const response = await axios.put(`http://localhost:5000/api/events/${editingEvent._id}`, newEvent);
+      const response = await axios.put(`${BASE_URL}/api/events/${editingEvent._id}`, newEvent);
       setEvents(events.map((event) => event._id === editingEvent._id ? response.data : event));
       setNewEvent({ title: "", description: "", date: "", location: "" });
       setEditingEvent(null);

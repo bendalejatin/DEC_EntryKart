@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./styles/UserManagement.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [societies, setSocieties] = useState([]);
@@ -25,7 +28,7 @@ const UserManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/users?email=${adminEmail}`);
+      const response = await axios.get(`${BASE_URL}/api/users?email=${adminEmail}`);
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -34,7 +37,7 @@ const UserManagement = () => {
 
   const fetchSocieties = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/societies?email=${adminEmail}`);
+      const response = await axios.get(`${BASE_URL}/api/societies?email=${adminEmail}`);
       setSocieties(response.data);
     } catch (error) {
       console.error("Error fetching societies:", error);
@@ -60,10 +63,10 @@ const UserManagement = () => {
     try {
       const payload = { ...formData, adminEmail };
       if (editingUser) {
-        await axios.put(`http://localhost:5000/api/users/${editingUser._id}`, payload);
+        await axios.put(`${BASE_URL}/api/users/${editingUser._id}`, payload);
         alert("✅ User updated successfully!");
       } else {
-        await axios.post("http://localhost:5000/api/users", payload);
+        await axios.post(`${BASE_URL}/api/users`, payload);
         alert("✅ User added successfully!");
       }
       fetchUsers();
@@ -91,7 +94,7 @@ const UserManagement = () => {
   const handleDeleteUser = async (id) => {
     if (!window.confirm("Are you sure you want to delete this user?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/users/${id}`);
+      await axios.delete(`${BASE_URL}/api/users/${id}`);
       fetchUsers();
     } catch (error) {
       alert(`❌ Error deleting user: ${error.response?.data?.message || error.message}`);

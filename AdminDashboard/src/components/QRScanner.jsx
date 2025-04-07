@@ -3,6 +3,9 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import "./styles/QRScanner.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const QRScanner = () => {
   const [couponDetails, setCouponDetails] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
@@ -18,7 +21,7 @@ const QRScanner = () => {
 
   const handleScan = async (code) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/coupons/scan/manual/${code}`);
+      const response = await axios.get(`${BASE_URL}/api/coupons/scan/manual/${code}`);
       setCouponDetails(response.data.coupon);
       setErrorMessage("");
     } catch (error) {

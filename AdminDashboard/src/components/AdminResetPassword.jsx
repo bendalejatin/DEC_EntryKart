@@ -3,6 +3,9 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 import "./styles/Auth.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const AdminResetPassword = () => {
   const { token } = useParams(); // ✅ Get token from URL
   const [newPassword, setNewPassword] = useState("");
@@ -12,7 +15,7 @@ const AdminResetPassword = () => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/auth/reset-password", { token, newPassword });
+      await axios.post(`${BASE_URL}/api/auth/reset-password`, { token, newPassword });
       alert("✅ Password updated successfully! Please log in.");
       navigate("/admin/login");
     } catch (error) {

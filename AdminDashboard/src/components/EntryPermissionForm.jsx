@@ -4,6 +4,9 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../components/styles/EntryPermissionForm.css"; // Adjust the path if needed
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const EntryPermissionForm = () => {
   const [entries, setEntries] = useState([]);
   const [name, setName] = useState("");
@@ -25,7 +28,7 @@ const EntryPermissionForm = () => {
   const fetchEntries = async () => {
     try {
       // Include adminEmail in query to filter results (unless superadmin)
-      const res = await axios.get(`http://localhost:5000/api/entries?email=${adminEmail}`);
+      const res = await axios.get(`${BASE_URL}/api/entries?email=${adminEmail}`);
       setEntries(res.data);
     } catch (error) {
       console.error(error);
@@ -35,7 +38,7 @@ const EntryPermissionForm = () => {
   const checkExpiringPermissions = async () => {
     try {
       // Use the expiring-soon route to fetch entries expiring soon
-      const res = await axios.get("http://localhost:5000/api/entries/expiring-soon");
+      const res = await axios.get(`${BASE_URL}/api/entries/expiring-soon`);
       if (res.data.length > 0) {
         res.data.forEach((entry) => {
           toast.warn(`Permission for ${entry.name} is expiring soon!`);
@@ -62,7 +65,7 @@ const EntryPermissionForm = () => {
 
     try {
       if (editingId) {
-        await axios.put(`http://localhost:5000/api/entries/${editingId}`, {
+        await axios.put(`${BASE_URL}/api/entries/${editingId}`, {
           name,
           flatNumber,
           dateTime,
@@ -81,7 +84,7 @@ const EntryPermissionForm = () => {
         setEditingId(null);
         toast.success("Entry updated successfully!");
       } else {
-        const res = await axios.post("http://localhost:5000/api/entries", {
+        const res = await axios.post(`${BASE_URL}/api/entries`, {
           name,
           flatNumber,
           dateTime,
@@ -115,7 +118,7 @@ const EntryPermissionForm = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/entries/${id}`);
+      await axios.delete(`${BASE_URL}/api/entries/${id}`);
       setEntries(entries.filter((entry) => entry._id !== id));
       toast.success("Entry deleted successfully!");
     } catch (error) {

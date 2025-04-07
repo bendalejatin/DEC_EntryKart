@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./styles/FlatOwnerDetails.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const FlatOwnerDetails = () => {
   const [societies, setSocieties] = useState([]);
   const [flatNumbers, setFlatNumbers] = useState([]);
@@ -36,7 +39,7 @@ const FlatOwnerDetails = () => {
 
   const fetchSocieties = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/societies?email=${adminEmail}`);
+      const response = await axios.get(`${BASE_URL}/api/societies?email=${adminEmail}`);
       setSocieties(response.data);
     } catch (error) {
       console.error("Error fetching societies:", error);
@@ -53,7 +56,7 @@ const FlatOwnerDetails = () => {
   // Fetch flats when a society is selected
   useEffect(() => {
     if (selectedSociety) {
-      axios.get(`http://localhost:5000/api/flats/flats/${selectedSociety}`)
+      axios.get(`${BASE_URL}/api/flats/flats/${selectedSociety}`)
         .then(response => setFlatNumbers(response.data))
         .catch(error => console.error("Error fetching flats:", error));
     }
@@ -62,7 +65,7 @@ const FlatOwnerDetails = () => {
   // Fetch owner details when society and flat are selected
   useEffect(() => {
     if (selectedSociety && selectedFlat) {
-      axios.get(`http://localhost:5000/api/flats/owner/${selectedSociety}/${selectedFlat}`)
+      axios.get(`${BASE_URL}/api/flats/owner/${selectedSociety}/${selectedFlat}`)
         .then(response => {
           setOwnerDetails(response.data);
           setOwnerForm({
@@ -85,11 +88,11 @@ const FlatOwnerDetails = () => {
 
   // Fetch all flat owner records and count for dashboard
   const fetchFlatOwners = () => {
-    axios.get(`http://localhost:5000/api/flats/all?email=${adminEmail}`)
+    axios.get(`${BASE_URL}/api/flats/all?email=${adminEmail}`)
       .then(response => setFlatOwners(response.data))
       .catch(error => console.error("Error fetching flat owners:", error));
 
-    axios.get(`http://localhost:5000/api/flats/count?email=${adminEmail}`)
+    axios.get(`${BASE_URL}/api/flats/count?email=${adminEmail}`)
       .then(response => setOwnerCount(response.data.count))
       .catch(error => console.error("Error fetching owner count:", error));
   };
@@ -116,7 +119,7 @@ const FlatOwnerDetails = () => {
       adminEmail: adminEmail
     };
     if (ownerDetails && ownerDetails._id) {
-      axios.put(`http://localhost:5000/api/flats/owner/${ownerDetails._id}/update`, payload)
+      axios.put(`${BASE_URL}/api/flats/owner/${ownerDetails._id}/update`, payload)
         .then(response => {
           setOwnerDetails(response.data);
           setIsEditingOwner(false);
@@ -124,7 +127,7 @@ const FlatOwnerDetails = () => {
         })
         .catch(error => console.error("Error updating owner details:", error));
     } else {
-      axios.post(`http://localhost:5000/api/flats/owner`, payload)
+      axios.post(`${BASE_URL}/api/flats/owner`, payload)
         .then(response => {
           setOwnerDetails(response.data);
           fetchFlatOwners();
@@ -144,7 +147,7 @@ const FlatOwnerDetails = () => {
     e.preventDefault();
     if (!ownerDetails || !ownerDetails._id) return;
     if (editIndex !== null) {
-      axios.put(`http://localhost:5000/api/flats/owner/${ownerDetails._id}/edit-family/${editIndex}`, familyMember)
+      axios.put(`${BASE_URL}/api/flats/owner/${ownerDetails._id}/edit-family/${editIndex}`, familyMember)
         .then(response => {
           setOwnerDetails(response.data);
           setFamilyMember({ name: "", relation: "", age: "", profession: "", contact: "" });
@@ -153,7 +156,7 @@ const FlatOwnerDetails = () => {
         })
         .catch(error => console.error("Error updating family member:", error));
     } else {
-      axios.put(`http://localhost:5000/api/flats/owner/${ownerDetails._id}/add-family`, familyMember)
+      axios.put(`${BASE_URL}/api/flats/owner/${ownerDetails._id}/add-family`, familyMember)
         .then(response => {
           setOwnerDetails(response.data);
           setFamilyMember({ name: "", relation: "", age: "", profession: "", contact: "" });
@@ -170,7 +173,7 @@ const FlatOwnerDetails = () => {
   };
 
   const handleDeleteFamilyMember = (index) => {
-    axios.delete(`http://localhost:5000/api/flats/owner/${ownerDetails._id}/delete-family/${index}`)
+    axios.delete(`${BASE_URL}/api/flats/owner/${ownerDetails._id}/delete-family/${index}`)
       .then(response => {
         setOwnerDetails(response.data);
         fetchFlatOwners();
@@ -180,7 +183,7 @@ const FlatOwnerDetails = () => {
 
   // Delete FlatOwner record
   const handleDeleteOwner = (id) => {
-    axios.delete(`http://localhost:5000/api/flats/owner/${id}`)
+    axios.delete(`${BASE_URL}/api/flats/owner/${id}`)
       .then(response => {
         fetchFlatOwners();
         if (ownerDetails && ownerDetails._id === id) {

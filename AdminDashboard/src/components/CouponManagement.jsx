@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./styles/CouponManagement.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const CouponManagement = () => {
   const storedAdminEmail = localStorage.getItem("adminEmail");
   const adminEmail = storedAdminEmail ? storedAdminEmail : "admin@example.com";
@@ -39,7 +42,7 @@ const CouponManagement = () => {
 
   const fetchSocieties = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/societies?email=${adminEmail}`);
+      const response = await axios.get(`${BASE_URL}/api/societies?email=${adminEmail}`);
       setSocieties(response.data);
     } catch (error) {
       console.error("Error fetching societies:", error);
@@ -48,7 +51,7 @@ const CouponManagement = () => {
 
   const fetchEvents = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/events?email=${adminEmail}`);
+      const response = await axios.get(`${BASE_URL}/api/events?email=${adminEmail}`);
       setEvents(response.data);
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -57,7 +60,7 @@ const CouponManagement = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/users?email=${adminEmail}`);
+      const response = await axios.get(`${BASE_URL}/api/users?email=${adminEmail}`);
       setUsers(response.data);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -66,7 +69,7 @@ const CouponManagement = () => {
 
   const fetchCoupons = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/coupons?email=${adminEmail}`);
+      const response = await axios.get(`${BASE_URL}/api/coupons?email=${adminEmail}`);
       setCoupons(response.data);
       // Reset pagination when new coupons are fetched.
       setCurrentPage(0);
@@ -121,12 +124,12 @@ const CouponManagement = () => {
         payload.userName = selectedUser;
       }
       if (editingCoupon) {
-        const response = await axios.put(`http://localhost:5000/api/coupons/${editingCoupon._id}`, payload);
+        const response = await axios.put(`${BASE_URL}/api/coupons/${editingCoupon._id}`, payload);
         alert("✅ Coupon Updated Successfully!");
         setCoupons(coupons.map(coupon => coupon._id === editingCoupon._id ? response.data : coupon));
         setEditingCoupon(null);
       } else {
-        const response = await axios.post("http://localhost:5000/api/coupons", payload);
+        const response = await axios.post(`${BASE_URL}/api/coupons`, payload);
         alert("✅ Coupon Created Successfully!");
         if (Array.isArray(response.data)) setCoupons([...coupons, ...response.data]);
         else setCoupons([...coupons, response.data]);
@@ -141,7 +144,7 @@ const CouponManagement = () => {
   const handleDeleteCoupon = async (id) => {
     if (!window.confirm("Are you sure you want to delete this coupon?")) return;
     try {
-      await axios.delete(`http://localhost:5000/api/coupons/${id}`);
+      await axios.delete(`${BASE_URL}/api/coupons/${id}`);
       setCoupons(coupons.filter(coupon => coupon._id !== id));
     } catch (error) {
       console.error("Error deleting coupon:", error);

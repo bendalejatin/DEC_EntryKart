@@ -37,9 +37,9 @@ const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/entrykartD
 
 // Connect to MongoDB
 mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(MONGO_URI)
   .then(async () => {
-    console.log("✅ MongoDB Connected");
+    console.log("✅ MongoDB Connected Successfully");
     await createSuperAdmin();
   })
   .catch((err) => console.error("❌ MongoDB Connection Failed", err));

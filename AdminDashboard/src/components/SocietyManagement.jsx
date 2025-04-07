@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./styles/SocietyManagement.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const SocietyManagement = () => {
   const [societies, setSocieties] = useState([]);
   const [newSociety, setNewSociety] = useState({
@@ -19,7 +22,7 @@ const SocietyManagement = () => {
   const fetchSocieties = async () => {
     try {
       const adminEmail = localStorage.getItem("adminEmail");
-      const response = await axios.get(`http://localhost:5000/api/societies?email=${adminEmail}`);
+      const response = await axios.get(`${BASE_URL}/api/societies?email=${adminEmail}`);
       setSocieties(response.data);
     } catch (error) {
       console.error("Error fetching societies:", error);
@@ -45,7 +48,7 @@ const SocietyManagement = () => {
       let response;
       if (editingSociety) {
         // Assuming your backend supports updating via PUT
-        response = await axios.put(`http://localhost:5000/api/societies/${editingSociety._id}`, {
+        response = await axios.put(`${BASE_URL}/api/societies/${editingSociety._id}`, {
           name: newSociety.name,
           location: newSociety.location,
           totalFlats: newSociety.totalFlats,
@@ -53,7 +56,7 @@ const SocietyManagement = () => {
         });
         alert("✅ Society updated successfully!");
       } else {
-        response = await axios.post("http://localhost:5000/api/societies", {
+        response = await axios.post(`${BASE_URL}/api/societies`, {
           name: newSociety.name,
           location: newSociety.location,
           totalFlats: newSociety.totalFlats,
@@ -76,7 +79,7 @@ const SocietyManagement = () => {
     if (!confirmDelete) return;
     try {
       // The DELETE URL must match your backend route.
-      await axios.delete(`http://localhost:5000/api/societies/${id}`);
+      await axios.delete(`${BASE_URL}/api/societies/${id}`);
       // Remove the deleted society from local state.
       setSocieties((prev) => prev.filter((society) => society._id !== id));
       alert("✅ Society deleted successfully!");

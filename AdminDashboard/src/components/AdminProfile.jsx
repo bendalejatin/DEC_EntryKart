@@ -3,6 +3,9 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./styles/AdminProfile.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const AdminProfile = () => {
   const [admin, setAdmin] = useState({
     name: "",
@@ -22,7 +25,7 @@ const AdminProfile = () => {
         const adminEmail = localStorage.getItem("adminEmail");
         if (!adminEmail) return;
 
-        const response = await axios.get(`http://localhost:5000/api/auth/profile?email=${adminEmail}`);
+        const response = await axios.get(`${BASE_URL}/api/auth/profile?email=${adminEmail}`);
         setAdmin((prevAdmin) => ({
           ...prevAdmin,
           ...response.data,
@@ -56,7 +59,7 @@ const AdminProfile = () => {
       }
 
       const updatedAdmin = { ...admin, image };
-      await axios.put("http://localhost:5000/api/auth/update", updatedAdmin, {
+      await axios.put(`${BASE_URL}/api/auth/update`, updatedAdmin, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

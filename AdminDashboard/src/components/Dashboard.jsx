@@ -4,6 +4,9 @@ import { Bar, Line, Pie, Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS } from "chart.js/auto";
 import "./styles/Dashboard.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // deployment url
+
 const Dashboard = () => {
   // Stats Count State Section (including entries)
   const [stats, setStats] = useState({
@@ -26,7 +29,7 @@ const Dashboard = () => {
       try {
         // Fetch Admin Profile for stats
         const profileRes = await axios.get(
-          `http://localhost:5000/api/auth/profile?email=${adminEmail}`
+          `${BASE_URL}/api/auth/profile?email=${adminEmail}`
         );
         setAdminInfo(profileRes.data);
 
@@ -40,13 +43,13 @@ const Dashboard = () => {
           flatOwnerRes,
           entryRes,
         ] = await Promise.all([
-          axios.get(`http://localhost:5000/api/societies/count?email=${adminEmail}`),
-          axios.get(`http://localhost:5000/api/users/count?email=${adminEmail}`),
-          axios.get(`http://localhost:5000/api/coupons/count?email=${adminEmail}`),
-          axios.get(`http://localhost:5000/api/events/count?email=${adminEmail}`),
-          axios.get(`http://localhost:5000/api/broadcast/count?email=${adminEmail}`),
-          axios.get(`http://localhost:5000/api/flats/count?email=${adminEmail}`),
-          axios.get(`http://localhost:5000/api/entries/count?email=${adminEmail}`),
+          axios.get(`${BASE_URL}/api/societies/count?email=${adminEmail}`),
+          axios.get(`${BASE_URL}/api/users/count?email=${adminEmail}`),
+          axios.get(`${BASE_URL}/api/coupons/count?email=${adminEmail}`),
+          axios.get(`${BASE_URL}/api/events/count?email=${adminEmail}`),
+          axios.get(`${BASE_URL}/api/broadcast/count?email=${adminEmail}`),
+          axios.get(`${BASE_URL}/api/flats/count?email=${adminEmail}`),
+          axios.get(`${BASE_URL}/api/entries/count?email=${adminEmail}`),
         ]);
 
         setStats({
