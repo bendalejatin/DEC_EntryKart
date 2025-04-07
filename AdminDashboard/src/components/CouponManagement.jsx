@@ -15,7 +15,7 @@ const CouponManagement = () => {
   const [selectedSociety, setSelectedSociety] = useState("");
   const [selectedFlat, setSelectedFlat] = useState("");
   const [selectedUser, setSelectedUser] = useState("");
-  const [code, setCode] = useState("");
+  const [code, setCode]  = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState("");

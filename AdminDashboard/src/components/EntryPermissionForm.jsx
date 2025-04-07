@@ -141,6 +141,7 @@ const EntryPermissionForm = () => {
           onChange={(e) => setName(e.target.value)}
           className="input-field"
         />
+        
         <h3>Flat Number:</h3>
         <input
           type="text"

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./styles/Auth.css";
 
+// const BASE_URL = "http://localhost:5000"; // Adjust this to your backend URL
+const BASE_URL = "https://backend-clr8.onrender.com" ; // Adjust this to your backend URL
+
 const AdminForgotPassword = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -9,7 +12,7 @@ const AdminForgotPassword = () => {
   const handleForgotPassword = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/auth/forgot-password", { email });
+      const response = await axios.post(`${BASE_URL}/api/auth/forgot-password`, { email });
       setMessage(response.data.message);
     } catch (error) {
       setMessage("❌ Error: " + (error.response?.data?.message || error.message));

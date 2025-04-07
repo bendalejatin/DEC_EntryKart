@@ -9,6 +9,8 @@ const FlatOwnerDetails = () => {
   const [selectedFlat, setSelectedFlat] = useState("");
   const [ownerDetails, setOwnerDetails] = useState(null);
   const [isEditingOwner, setIsEditingOwner] = useState(false);
+  const [flats, setFlats] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
   const [ownerForm, setOwnerForm] = useState({
     ownerName: "",
     profession: "",
@@ -28,12 +30,25 @@ const FlatOwnerDetails = () => {
 
   const adminEmail = localStorage.getItem("adminEmail");
 
-  // Fetch societies on mount
   useEffect(() => {
-    axios.get("http://localhost:5000/api/flats/societies")
-      .then(response => setSocieties(response.data))
-      .catch(error => console.error("Error fetching societies:", error));
-  }, []);
+      fetchSocieties();
+    }, []);
+
+  const fetchSocieties = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/societies?email=${adminEmail}`);
+      setSocieties(response.data);
+    } catch (error) {
+      console.error("Error fetching societies:", error);
+    }
+  };
+
+  // // Fetch societies on mount
+  // useEffect(() => {
+  //   axios.get("http://localhost:5000/api/flats/societies")
+  //     .then(response => setSocieties(response.data))
+  //     .catch(error => console.error("Error fetching societies:", error));
+  // }, []);
 
   // Fetch flats when a society is selected
   useEffect(() => {
@@ -189,6 +204,14 @@ const FlatOwnerDetails = () => {
     });
   };
 
+  const handleSocietyChange = (societyId) => {
+    setSelectedSociety(societyId);
+    const society = societies.find(soc => soc._id === societyId);
+    setFlats(society ? society.flats : []);
+    setSelectedFlat("");
+    setSelectedUser("");
+  };
+
   return (
     <div className="flat-owner-details">
       <h2>Flat Owner Management</h2>
@@ -265,21 +288,40 @@ const FlatOwnerDetails = () => {
       {ownerDetails && (
         <div className="family-form">
           <h3>Family Members</h3>
-          {ownerDetails.familyMembers && ownerDetails.familyMembers.length > 0 ? (
-            <ul>
-              {ownerDetails.familyMembers.map((member, index) => (
-                <li key={index}>
-                  <span>
-                    {member.name} - {member.relation} ({member.age} years) | {member.profession} | {member.contact}
-                  </span>
-                  <button onClick={() => handleEditFamilyMember(index)} className="edit-btn">Edit</button>
-                  <button onClick={() => handleDeleteFamilyMember(index)} className="delete-btn">Delete</button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No family members added yet.</p>
-          )}
+{ownerDetails.familyMembers && ownerDetails.familyMembers.length > 0 ? (
+  <div className="family-table-wrapper">
+    <table className="family-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Relation</th>
+          <th>Age</th>
+          <th>Profession</th>
+          <th>Contact</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {ownerDetails.familyMembers.map((member, index) => (
+          <tr key={index}>
+            <td>{member.name}</td>
+            <td>{member.relation}</td>
+            <td>{member.age}</td>
+            <td>{member.profession}</td>
+            <td>{member.contact}</td>
+            <td>
+              <button onClick={() => handleEditFamilyMember(index)} className="edit-btn">Edit</button>
+              <button onClick={() => handleDeleteFamilyMember(index)} className="delete-btn">Delete</button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+) : (
+  <p>No family members added yet.</p>
+)}
+
 
           <h4>{editIndex !== null ? "Edit Family Member" : "Add Family Member"}</h4>
           <form onSubmit={handleFamilyMemberSubmit}>
